@@ -57,21 +57,16 @@ self:superCall( StatesMix, '__undoInit__' )
 local StatesMixModule = require 'dmc_corona.dmc_states_mix'
 
 
---== Setup ref to mixin (optional)
-local StatesMix = StatesMixModule.StatesMix
-
-
 --== Patch an object ==--
 
 -- create one for yourself (eg, with OOP library)
 
 local obj = {}  -- empty or create one from your OOP library
-obj = StatesMix.patch( obj ) -- returns object
-
+obj = StatesMixModule.patch( obj ) -- returns object
 
 -- or have patch() create one for you
 
-local obj = StatesMix.patch()  -- returns a new object
+local obj = StatesMixModule.patch()  -- returns a new object
 
 ```
 
