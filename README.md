@@ -153,7 +153,7 @@ To update, copy `dmc_corona_boot.lua` and `dmc_corona/` again from the newer ver
 
 ## Documentation
 
-`require 'dmc_corona.dmc_states_mix'` returns lua-states-mixin's module, so its documentation applies as written:
+`require 'dmc_corona.dmc_states_mix'` returns a copy of lua-states-mixin's module (1.4.0) with `VERSION` added, so its documentation applies as written:
 
 - [Reference](https://github.com/dmccuskey/lua-states-mixin#reference): `patch()`, `StatesMix`, and every method
 - [How States Work](https://github.com/dmccuskey/lua-states-mixin#how-states-work): moves, refusals, and the stack
@@ -163,16 +163,9 @@ To update, copy `dmc_corona_boot.lua` and `dmc_corona/` again from the newer ver
 
 dmc-states-mixin has no settings: `dmc_corona.cfg` needs no section for it, only the `[DMC_CORONA]` section that tells the loader where the libraries are. See [dmc-corona-boot Configuration](https://github.com/dmccuskey/dmc-corona-boot/blob/master/docs/configuration.md). (The `DEBUG_ACTIVE` setting of the old `[DMC_STATES]` section was never read; call `setDebug( true )` on an object instead.)
 
-## Known Issues
-
-The bugs of the state machine itself are in lua-states-mixin's [Known Issues](https://github.com/dmccuskey/lua-states-mixin#known-issues). In `dmc_states_mix.lua`:
-
-- It sets the global `_extend` (its copy of `Utils.extend()` declares the inner function without `local`).
-- Its version (`0.1.0`) isn't available to code.
-
 ## Development
 
-Only `dmc_corona/dmc_states_mix.lua` is written in this repository. It loads the DMC boot loader and returns lua-states-mixin's module from `lib.dmc_lua.lua_states_mix`. Everything else is a generated copy; fix it in its own repository, then rebuild:
+Only `dmc_corona/dmc_states_mix.lua` and `tests/` are written in this repository. `dmc_states_mix.lua` loads the DMC boot loader and returns a copy of lua-states-mixin's module from `lib.dmc_lua.lua_states_mix`, with `VERSION`; the shared module is left as it is. Everything else is a generated copy; fix it in its own repository, then rebuild:
 
 | file | owner |
 |---|---|
@@ -185,7 +178,13 @@ The copies are made by Snakemake from sibling checkouts of the repositories abov
 snakemake --cores 1 build_all
 ```
 
-dmc-states-mixin has no tests of its own; lua-states-mixin's are in its `spec/`. The Quick Start is the check that the package loads in Solar2D.
+The unit tests check the wrapper and that lua-states-mixin's fixes come through it; lua-states-mixin's full specs are in its `spec/`. They run under plain Lua 5.1 with dkjson, with stand-ins for the Solar2D globals the boot loader uses. From the repository's root folder:
+
+```sh
+tests/run_unit.sh
+```
+
+The Quick Start is the check that the package loads in Solar2D.
 
 ## License
 
